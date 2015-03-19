@@ -1,5 +1,5 @@
 // Javscript from Pattern in Python
-
+// New
 function attachEvent(element, name, f)
 {
     f = Function.closure(element, f);
