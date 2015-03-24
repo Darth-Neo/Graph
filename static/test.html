@@ -5,20 +5,44 @@
     </head>
     <body>
         <script type=text/javascript>
-          $(function() {
-            $('a#calculate').bind('click', function() {
-              $.getJSON('http://localhost:8080/add?a=2&b=2',
-              function(data) {
-                console.log(data.result)
-                alert("Data: " + data.result);
-                $("#result").text(data.result);
-              });
-              return false;
-            });
-          });
+          $(
+              function()
+              {
+                    $('a#calculate').bind('click',
+                    function()
+                    {
+                        debugger
+
+                        //var af = parseInt(document.getElementById("a").value);
+                        //var bf = parseInt(document.getElementById("b").value);
+
+                        a = $('input#a').val()
+                        b = $('input#b').val()
+
+                        console.log(a)
+                        console.log(b)
+
+                        var c = {"a" : a, "b" : b}
+
+                        var url = "http://localhost:8080/add?a=" + a + "&b=" + b
+
+                        $.getJSON(url,
+                          function(data)
+                          {
+                            console.log(data.result)
+                            alert("Data: " + data.result);
+                            $("#result").text(data.result);
+                          }
+                          );
+                          return false;
+                    }
+                );
+              }
+          );
+
         </script>
         <p>
-            <input type=text size=5 name=a> + <input type=text size=5 name=b> = <div id=result>?</div>
+            <input id=a type=text size=5 name=a> + <input id=b type=text size=5 name=b> = <div id=result>?</div>
         </p>
         <p>
             <a href=# id=calculate>calculate server side</a>

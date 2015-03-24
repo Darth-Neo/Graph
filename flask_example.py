@@ -13,6 +13,11 @@ gdb = GraphDatabase("http://localhost:7474")
 def get_index():
     return app.send_static_file('test.html')
 
+@app.route("/<file>")
+def get_file(file):
+    print "%s" % file
+    return app.send_static_file(file)
+
 @app.route("/add")
 def get_add():
     try:

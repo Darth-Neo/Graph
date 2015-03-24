@@ -1,0 +1,85 @@
+<html>
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <title>Solr Search</title>
+</head>
+<body>
+    <h3>Solr Search</h3>
+
+    <h4>Query: <input id="query" /></h4>
+
+    <button id="search">Search</button>
+    <hr/>
+    <table class=".table .table-striped" id="results">
+    </table>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+    <script>
+        function on_data(data)
+        {
+            debugger
+            $('#results').empty();
+            var docs = data.response.docs;
+            var item;
+
+            var table = document.getElementById("results");
+
+            for (i = 0; i < docs.length; i++)
+            {
+                var row = table.insertRow(i);
+
+                item = docs[i];
+                var ns = " ";
+
+                var keys = Object.keys(item);
+
+                for (var j = 0; j < keys.length; j++)
+                {
+
+                    var key = keys[j]
+                    var val = item[key];
+                    var cell = row.insertCell(j);
+                    cell.innerHTML = key + " : " + val;
+                };
+
+                //$('#results').append($("<tr>" + ns + "</tr>"))
+            }
+
+            //$.each(docs, function(i, item) {
+            //    $('#results').prepend($('<tr><td>' + item.ID + '</td><td>' + item.Name + '</td><td>'  + item.Type + '<tr></tr>'));
+            //});
+
+            var total = 'Found ' + docs.length + ' results';
+            $('#results').prepend('<div>' + total + '</div>');
+        }
+
+        function on_search()
+        {
+            var query = $('#query').val();
+            if (query.length == 0)
+            {
+                return;
+            }
+
+            var url='http://localhost:8983/solr/gettingstarted_shard1_replica1/select?q='+query+'&wt=json&indent=true&version=2.2&start=0&rows=15&indent=on&wt=json&callback=?&json.wrf=on_data';
+            $.getJSON(url);
+        }
+
+        function on_ready()
+        {
+            $('#search').click(on_search);
+            /* Hook enter to search */
+            $('body').keypress(function(e)
+            {
+                if (e.keyCode == '13')
+                {
+                    on_search();
+                }
+            });
+        }
+
+        $(document).ready(on_ready);
+    </script>
+
+</body>
+</html>
